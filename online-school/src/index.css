@@ -335,3 +335,26 @@ textarea:focus {
 .sign-in-pointer {
   cursor: pointer;
 }
+
+.card-book-add {
+  width: 315px;
+  height: 150px;
+}
+
+.card-title-add {
+  text-align: center;
+  align-items: center !important;
+  justify-content: center !important;
+  left: 50%;
+  right: 50%;
+}
+
+.card-book-add {
+  margin-top: 20px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.card-title-add:hover {
+  color: coral;
+}

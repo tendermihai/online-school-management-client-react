@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { addEnrolment, deleteEnrolment } from "../../service/enrolment-service";
+import { addEnrolment, deleteEnrolment, findEnrolmentById } from "../../service/enrolment-service";
 import Spinner from "react-bootstrap/Spinner";
+
 
 const Card = ({ course }) => {
     const [loadingState, setLoadingState] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    const userId = '1';
+    let userId = '1';
 
     const getCurrentDate = () => {
         const currentDate = new Date();
@@ -19,7 +20,7 @@ const Card = ({ course }) => {
 
     const handleSubscribe = async () => {
         try {
-            setLoadingState("loading"); // Set loading state initially
+            setLoadingState("loading");
 
             const response = await addEnrolment({
                 createdAt: getCurrentDate(),
@@ -31,13 +32,51 @@ const Card = ({ course }) => {
 
             if (response.type === "success") {
                 setLoadingState("success");
-                // You can include specific content for success here if needed
             } else {
                 setLoadingState("error");
-                setErrorMessage(response.payload); // Display the error message in the UI
+                alert(response.payload)
+                setErrorMessage(response.payload);
             }
         } catch (error) {
             console.log("Error while subscribing", error);
+            setLoadingState("error");
+            setErrorMessage("An error occurred");
+        }
+    };
+
+
+    const handleUnsubscribe = async () => {
+        try {
+            setLoadingState("loading");
+
+            // Assuming you have the enrolment ID associated with the course
+            const courseId = `${course.id}`; // Replace with the actual course ID
+            const userId = 1; // Replace with the actual user ID
+
+            // Find the enrolment by course and user ID using enrolment-service.js
+            const enrolmentResponse = await findEnrolmentById(courseId, userId);
+
+            if (enrolmentResponse.type === "success") {
+                const enrolment = enrolmentResponse.payload;
+                console.log(enrolment, 'this is my enrolment')
+
+                // Delete the enrolment using its ID from course-service.js
+                const deleteResponse = await deleteEnrolment(enrolment.id);
+
+                if (deleteResponse.type === "success") {
+                    setLoadingState("success");
+                } else {
+                    setLoadingState("error");
+                    // alert(deleteResponse.payload);
+                    setErrorMessage(deleteResponse.payload);
+                }
+            } else {
+                setLoadingState("error");
+                alert(enrolmentResponse.payload);
+                setErrorMessage(enrolmentResponse.payload);
+            }
+        } catch (error) {
+            console.log("Error while unsubscribing", error);
             setLoadingState("error");
             setErrorMessage("An error occurred");
         }
@@ -54,7 +93,7 @@ const Card = ({ course }) => {
                     <p className="card-text">Department: {course.department}</p>
                     <section className="btns">
                         <button className="subscribe" onClick={handleSubscribe}>Subscribe</button>
-                        <button className="unsubscribe">Unsubscribe</button>
+                        <button className="unsubscribe" onClick={handleUnsubscribe}>Unsubscribe</button>
                     </section>
                 </div>
             </div>
