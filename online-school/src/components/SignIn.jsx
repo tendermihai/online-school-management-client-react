@@ -51,6 +51,7 @@ const SignIn = () => {
                             <input id="emailAddress" name="emailAddress" type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                             <label for="password">Password</label>
                             <input id="password" name="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+
                             {error && <p className="error-message">{error}</p>}
                             <button className="button signinBtn" type="submit">Sign In</button><button
                                 className="button button-secondary"
