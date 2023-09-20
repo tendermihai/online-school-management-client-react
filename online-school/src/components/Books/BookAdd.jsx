@@ -1,13 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import BookCreate from "./BookCreate";
 
-const BookAdd = () => {
+const BookAdd = ({ student_id }) => {
 
     const navigate = useNavigate()
 
     let handleBookCreatePage = () => {
 
-        navigate("/books-create")
+        navigate("/books-create", {
+            state: student_id
+        })
     }
 
 

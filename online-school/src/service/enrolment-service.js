@@ -95,10 +95,50 @@ async function findEnrolmentById(id) {
   return data.json();
 }
 
+async function unEnrollment() {
+  const queryParams = {
+    student_id: 1,
+    course_id: 2,
+  };
+
+  const queryString = new URLSearchParams(queryParams).toString();
+
+  console.log(queryString, "queryString");
+  try {
+    let data = await api(
+      `/api/v1/enrolment/delete/enrolment?${queryString}`,
+      "DELETE"
+    );
+    console.log(data.status, "this is data");
+    if (data.status === 200) {
+      let rez = await data.json();
+
+      console.log(rez);
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      payload: "Error occured",
+      type: "error",
+    };
+  }
+}
+
 export {
   getEnrolments,
   addEnrolment,
   deleteEnrolment,
   findEnrolmentByCourse,
   findEnrolmentById,
+  unEnrollment,
 };

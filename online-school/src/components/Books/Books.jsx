@@ -6,6 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { getBooksByStudentId } from "../../service/book-service";
 import { useNavigate } from "react-router";
 
+
 const Books = () => {
 
     const student_id = "1"
@@ -40,20 +41,13 @@ const Books = () => {
         handleBooks(student_id);
     }, [student_id]);
 
-    let handleSignIn = () => {
-        navigate("/sign-in")
-    }
-
-    let handleSignUp = () => {
-        navigate("/sign-up")
-    }
-
 
 
     return (
         <>
             <NavbarItem />
-            <BookAdd />
+            <BookAdd student_id={student_id} />
+
             {loadingState === "success" && (
                 <div className="container-cards">
                     {books?.length > 0 ? (
