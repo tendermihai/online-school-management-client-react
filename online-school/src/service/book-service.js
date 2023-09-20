@@ -63,4 +63,52 @@ async function getBooksByStudentId(student_id) {
   }
 }
 
-export { getBooks, getBooksByStudentId };
+async function addNewBook(book) {
+  try {
+    let response = await api("/api/v1/book/add", "POST", book);
+
+    const data = await response.json();
+    return {
+      type: "success",
+      payload: data,
+    };
+  } catch (error) {
+    return {
+      type: "error",
+      payload: "An error occured",
+    };
+  }
+}
+
+async function deleteBook(id) {
+  try {
+    let data = await api(`/api/v1/book/delete/${id}`, "DELETE");
+    if (data.status === 200) {
+      let rez = await data.json();
+
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    } else if (data.status === 500) {
+      let rez = await data.json();
+      return {
+        payload: rez.error,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    return {
+      payload: "error occured",
+      type: "error",
+    };
+  }
+}
+
+export { getBooks, getBooksByStudentId, addNewBook, deleteBook };

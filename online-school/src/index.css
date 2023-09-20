@@ -358,3 +358,41 @@ textarea:focus {
 .card-title-add:hover {
   color: coral;
 }
+
+.value-book {
+  color: black;
+}
+
+.create-book-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.book-card {
+  height: 420px;
+}
+
+.book-btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.delBook {
+  border: none;
+  background-color: #e83283;
+}
+
+.updBook {
+  border: none;
+  background-color: #e83283;
+}
+
+.delBook:hover {
+  color: coral;
+}
+
+.updBook:hover {
+  color: coral;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addEnrolment, deleteEnrolment, findEnrolmentById } from "../../service/enrolment-service";
+import { addEnrolment, unEnrollment } from "../../service/enrolment-service";
 import Spinner from "react-bootstrap/Spinner";
 
 
@@ -49,26 +49,24 @@ const Card = ({ course }) => {
         try {
             setLoadingState("loading");
 
-            // Assuming you have the enrolment ID associated with the course
-            const courseId = `${course.id}`; // Replace with the actual course ID
-            const userId = 1; // Replace with the actual user ID
 
-            // Find the enrolment by course and user ID using enrolment-service.js
-            const enrolmentResponse = await findEnrolmentById(courseId, userId);
+
+            const enrolmentResponse = await unEnrollment(userId, course.id);
+
+            console.log(enrolmentResponse.payload, 'enrolment response asda')
+
 
             if (enrolmentResponse.type === "success") {
                 const enrolment = enrolmentResponse.payload;
                 console.log(enrolment, 'this is my enrolment')
 
-                // Delete the enrolment using its ID from course-service.js
-                const deleteResponse = await deleteEnrolment(enrolment.id);
 
-                if (deleteResponse.type === "success") {
+                if (enrolmentResponse.type === "success") {
                     setLoadingState("success");
                 } else {
                     setLoadingState("error");
-                    // alert(deleteResponse.payload);
-                    setErrorMessage(deleteResponse.payload);
+                    alert(enrolmentResponse.payload)
+                    setErrorMessage(enrolmentResponse.payload);
                 }
             } else {
                 setLoadingState("error");
