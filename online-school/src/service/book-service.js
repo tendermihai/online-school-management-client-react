@@ -111,4 +111,48 @@ async function deleteBook(id) {
   }
 }
 
-export { getBooks, getBooksByStudentId, addNewBook, deleteBook };
+async function updateBook(book, id) {
+  try {
+    let data = await api(`/api/v1/book/update/${id}`, "PUT", book);
+    if (data.status === 20) {
+      let rez = await data.json();
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    } else if (data.status === 500) {
+      let rez = await data.json();
+      return {
+        payload: rez.error,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    return {
+      payload: "error occured",
+      type: "error",
+    };
+  }
+}
+
+async function getBookById(id) {
+  let data = await api(`/api/v1/book/find/by/bookId/${id}`, "GET", null);
+
+  return data.json();
+}
+
+export {
+  getBooks,
+  getBooksByStudentId,
+  addNewBook,
+  deleteBook,
+  updateBook,
+  getBookById,
+};

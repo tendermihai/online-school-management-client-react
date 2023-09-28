@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import NavbarItem from "../NavbarItem";
-import BookCreate from "./BookCreate";
-import { deleteBook } from "../../service/book-service";
+import { deleteBook, updateBook } from "../../service/book-service";
+import { useParams } from "react-router";
+import { getBookById } from "../../service/book-service";
+import BookUpdate from "./BookUpdate";
+import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 
 
 const BookCard = ({ book }) => {
+
+    const navigate = useNavigate();
+
     const { id, bookName, createdAt, student_id } = book;
 
     const [loadingState, setLoadingState] = useState("");
@@ -28,6 +34,14 @@ const BookCard = ({ book }) => {
         }
     }
 
+    let handleUpdatePage = () => {
+        navigate("/books-update", {
+            state: { student_id, id }
+        })
+        console.log(id, 'this is book id')
+        console.log(student_id, 'this is the student_id')
+    }
+
     return (
         <>
 
@@ -42,7 +56,7 @@ const BookCard = ({ book }) => {
                         <p className="card-text">StudentID: {student_id}</p>
                         <section className="book-btns">
                             <button className="delBook" onClick={() => handleDeleteBook(id)}>Delete</button>
-                            <button className="updBook">Update</button>
+                            <button className="updBook" onClick={() => handleUpdatePage(id)}>Update</button>
                         </section>
                         {/* Add other book details here */}
                     </div>
