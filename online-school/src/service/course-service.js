@@ -60,9 +60,36 @@ async function findEnrolmentById(id) {
   return data.json();
 }
 
+async function verifyCourse(id) {
+  try {
+    let data = await api(`/api/v1/course/verify/${id}`, "GET", null);
+    if (data.status === 200) {
+      let rez = await data.json();
+
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    return {
+      payload: "error occured",
+      type: "error",
+    };
+  }
+}
+
 export {
   getAllCourses,
   deleteEnrolment,
   findEnrolmentByCourse,
   findEnrolmentById,
+  verifyCourse,
 };
