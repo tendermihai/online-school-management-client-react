@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { getAllCourses } from "../../service/course-service";
+import { getAllCourses, verifyCourse } from "../../service/course-service";
 import Card from "./Cards"
 import Spinner from "react-bootstrap/Spinner";
 // import { useNavigate } from "react-router";
 import NavbarItem from "../NavbarItem"
-
+import { useLocation } from "react-router-dom";
 
 
 const Home = () => {
     let [courses, setCourses] = useState([]);
     let [loadingState, setLoadingState] = useState("init");
     let [errorMessage, setErrorMessage] = useState("");
+
+    const student_id = 1;
+
+
     // let [user, setUser] = useState("");
 
     // let userId = 1;
@@ -19,7 +23,9 @@ const Home = () => {
     let handleCourses = async () => {
         setLoadingState("loading");
 
-        let response = await getAllCourses();
+
+
+        let response = await verifyCourse(student_id);
 
         console.log(response, 'this is response')
 

@@ -90,8 +90,19 @@ const Card = ({ course }) => {
                     <h4 className="card-title">Name: {course.name}</h4>
                     <p className="card-text">Department: {course.department}</p>
                     <section className="btns">
-                        <button className="subscribe" onClick={handleSubscribe}>Subscribe</button>
-                        <button className="unsubscribe" onClick={handleUnsubscribe}>Unsubscribe</button>
+
+                        {course.enrolled == true ? (
+                            <button className="unsubscribe" onClick={handleUnsubscribe}>
+                                Unsubscribe
+                            </button>
+                        ) : (
+
+
+                            <button className="subscribe" onClick={handleSubscribe}>
+                                Subscribe
+                            </button>
+                        )}
+
                     </section>
                 </div>
             </div>
