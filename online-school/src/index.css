@@ -396,3 +396,17 @@ textarea:focus {
 .updBook:hover {
   color: coral;
 }
+
+.update-book {
+  margin: 20px;
+}
+
+.updateBook {
+  border: none;
+  background-color: #e83283;
+}
+
+.cancelUpdateBook {
+  border: none;
+  background-color: #e83283;
+}

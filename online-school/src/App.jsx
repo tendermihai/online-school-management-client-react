@@ -5,6 +5,7 @@ import SignIn from "./components/SignIn";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Books from "./components/Books/Books";
 import BookCreate from "./components/Books/BookCreate";
+import BookUpdate from "./components/Books/BookUpdate";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/books-show" element={<Books />} />
           <Route path="/books-create" element={<BookCreate />} />
+          <Route path="/books-update" element={<BookUpdate />} />
         </Routes>
       </BrowserRouter>
     </>
