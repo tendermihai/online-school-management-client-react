@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { addEnrolment, unEnrollment } from "../../service/enrolment-service";
 import Spinner from "react-bootstrap/Spinner";
+import { useEffect } from "react";
 
 
-const Card = ({ course }) => {
+const Card = ({ course, allCourses }) => {
     const [loadingState, setLoadingState] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    console.log(course, 'this is my logged course')
     let userId = '1';
 
     const getCurrentDate = () => {
@@ -30,6 +32,8 @@ const Card = ({ course }) => {
 
             console.log(response, 'this is subscribe resp');
 
+            await allCourses();
+
             if (response.type === "success") {
                 setLoadingState("success");
             } else {
@@ -52,6 +56,8 @@ const Card = ({ course }) => {
 
 
             const enrolmentResponse = await unEnrollment(userId, course.id);
+
+            await allCourses()
 
             console.log(enrolmentResponse.payload, 'enrolment response asda')
 
@@ -79,6 +85,10 @@ const Card = ({ course }) => {
             setErrorMessage("An error occurred");
         }
     };
+
+    // useEffect(() => {
+    //     handleUnsubscribe()
+    // }, [])
 
     return (
         <div className="myCards">

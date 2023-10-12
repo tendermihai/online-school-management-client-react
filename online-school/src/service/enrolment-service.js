@@ -95,10 +95,10 @@ async function findEnrolmentById(id) {
   return data.json();
 }
 
-async function unEnrollment() {
+async function unEnrollment(student_id, course_id) {
   const queryParams = {
-    student_id: 1,
-    course_id: 2,
+    student_id: student_id,
+    course_id: course_id,
   };
 
   const queryString = new URLSearchParams(queryParams).toString();
