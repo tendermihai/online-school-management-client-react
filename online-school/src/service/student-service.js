@@ -23,13 +23,13 @@ async function loginStudent(email, password) {
   };
   try {
     let data = await api("/api/v1/students/login", "POST", student);
-    if (data.status == 200) {
+    if (data.status === 200) {
       let rez = await data.json();
       return {
         payload: rez,
         type: "success",
       };
-    } else if (data.status == 400) {
+    } else if (data.status === 400) {
       let rez = await data.json();
       console.log(rez, "this is login rez");
       return {
@@ -45,4 +45,35 @@ async function loginStudent(email, password) {
   }
 }
 
-export { loginStudent };
+async function registerStudent(firstName, lastName, age, email, password) {
+  const student = {
+    firstName: firstName,
+    lastName: lastName,
+    age: age,
+    email: email,
+    password: password,
+  };
+  try {
+    let data = await api("/api/v1/students/register", "POST", student);
+    if (data.status === 200) {
+      let rez = await data.json();
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    return {
+      payload: "error occured",
+      type: "error",
+    };
+  }
+}
+
+export { loginStudent, registerStudent };

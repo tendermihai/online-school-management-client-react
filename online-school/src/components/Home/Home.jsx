@@ -1,51 +1,46 @@
 import React, { useEffect, useState } from "react";
-
-import { getAllCourses, verifyCourse } from "../../service/course-service";
-import Card from "./Cards"
+import { verifyCourse } from "../../service/course-service";
+import Card from "./Cards";
 import Spinner from "react-bootstrap/Spinner";
-// import { useNavigate } from "react-router";
-import NavbarItem from "../NavbarItem"
-import { useLocation } from "react-router-dom";
-
+import NavbarItem from "../NavbarItem";
+import { useSortContext } from "../context/ContextSort";
 
 const Home = () => {
-    let [courses, setCourses] = useState([]);
-    let [loadingState, setLoadingState] = useState("init");
-    let [errorMessage, setErrorMessage] = useState("");
-
+    const { sortOption } = useSortContext();
+    const [courses, setCourses] = useState([]);
+    const [loadingState, setLoadingState] = useState("init");
+    const [errorMessage, setErrorMessage] = useState("");
     const student_id = 1;
 
-
-    // let [user, setUser] = useState("");
-
-    // let userId = 1;
-    // const navigate = useNavigate();
-    let handleCourses = async () => {
+    const handleCourses = async () => {
         setLoadingState("loading");
 
-
-
-        let response = await verifyCourse(student_id);
-
-        console.log(response, 'this is response')
+        const response = await verifyCourse(student_id);
 
         if (response.type === "success") {
-            console.log("Data from server:", response);
             setLoadingState("success");
             setCourses(response.payload);
         } else {
             setLoadingState("error");
-            alert(response.payload);
             setErrorMessage(response.payload);
         }
-    }
+    };
 
     useEffect(() => {
         handleCourses();
     }, []);
 
-
-
+    const getSortedCourses = () => {
+        if (sortOption === "name") {
+            return [...courses].sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortOption === "department") {
+            return [...courses].sort((a, b) => a.department.localeCompare(b.department));
+        } else if (sortOption === "id") {
+            return [...courses].sort((a, b) => parseInt(a.id, 10) - parseInt(b.id, 10));
+        } else {
+            return courses;
+        }
+    };
 
     return (
         <>
@@ -53,8 +48,8 @@ const Home = () => {
             {loadingState === "success" && (
                 <div className="container-cards">
                     {courses.length > 0 ? (
-                        courses.map((item) => {
-                            return <Card course={item} allCourses={handleCourses} />;
+                        getSortedCourses().map((item) => {
+                            return <Card course={item} key={item.id} allCourses={handleCourses} />;
                         })
                     ) : (
                         <Spinner animation="border" role="status">
@@ -73,6 +68,6 @@ const Home = () => {
             {loadingState === "error" && <p>{errorMessage}</p>}
         </>
     );
-};
+}
 
 export default Home;
