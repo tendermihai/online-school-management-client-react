@@ -1,4 +1,4 @@
-function api(path, method, body) {
+function api(path, method, body, token) {
   const url = "http://localhost:2020" + path;
 
   const options = {
@@ -6,6 +6,7 @@ function api(path, method, body) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-Requested-With": "XMLHttpRequest",
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -20,14 +21,14 @@ async function getEnrolments() {
   try {
     let data = await api("/api/v1/enrolment/all", "GET", null);
     console.log(data, "data");
-    if (data.status == 200) {
+    if (data.status === 200) {
       let rez = await data.json();
       console.log(rez, "payload undefined");
       return {
         payload: rez,
         type: "success",
       };
-    } else if (data.status == 400) {
+    } else if (data.status === 400) {
       let rez = await data.json();
       console.log(rez, "this is my new rez");
       return {
@@ -44,24 +45,24 @@ async function getEnrolments() {
   }
 }
 
-async function addEnrolment(enrolment) {
+async function addEnrolment(enrolment, token) {
   try {
-    let data = await api("/api/v1/enrolment/add", "POST", enrolment);
-    if (data.status == 200) {
+    let data = await api("/api/v1/enrolment/add", "POST", enrolment, token);
+    if (data.status === 200) {
       let rez = await data.json();
       console.log(rez, "this is rez for succes");
       return {
         payload: rez,
         type: "success",
       };
-    } else if (data.status == 400) {
+    } else if (data.status === 400) {
       let rez = await data.json();
 
       return {
         payload: rez.error.message,
         type: "error",
       };
-    } else if (data.status == 500) {
+    } else if (data.status === 500) {
       let rez = await data.json();
       console.log(rez.error, "this is rez for 500");
       return {

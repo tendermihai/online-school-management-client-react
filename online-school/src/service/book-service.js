@@ -1,4 +1,4 @@
-function api(path, method, body) {
+function api(path, method, body, token) {
   const url = "http://localhost:2020" + path;
 
   const options = {
@@ -6,6 +6,7 @@ function api(path, method, body) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-Requested-With": "XMLHttpRequest",
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -14,11 +15,11 @@ function api(path, method, body) {
   }
 
   return fetch(url, options);
-} // metoda asta returneaza un promise si tb sa faci cu async await sau cu .then
+}
 
-async function getBooks() {
+async function getBooks(token) {
   try {
-    let data = await api("/api/v1/book/all", "GET", null); // ca aici
+    let data = await api("/api/v1/book/all", "GET", null, token);
     if (data.status === 200) {
       let rez = await data.json();
       return {
@@ -41,9 +42,14 @@ async function getBooks() {
   }
 }
 
-async function getBooksByStudentId(student_id) {
+async function getBooksByStudentId(student_id, token) {
   try {
-    let response = await api(`/api/v1/book/find/${student_id}`, "GET", null);
+    let response = await api(
+      `/api/v1/book/find/${student_id}`,
+      "GET",
+      null,
+      token
+    );
     // if (!response.ok) {
     //   throw new Error("HTTP error !");
     // }
@@ -65,17 +71,31 @@ async function getBooksByStudentId(student_id) {
 
 async function addNewBook(book) {
   try {
-    let response = await api("/api/v1/book/add", "POST", book);
+    let data = await api("/api/v1/book/add", "POST", book);
 
-    const data = await response.json();
-    return {
-      type: "success",
-      payload: data,
-    };
+    if (data.status === 200) {
+      let rez = await data.json();
+      return {
+        type: "success",
+        payload: rez,
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    } else if (data.status === 500) {
+      let rez = await data.json();
+      return {
+        payload: rez.error,
+        type: "error",
+      };
+    }
   } catch (error) {
     return {
+      payload: "error occured",
       type: "error",
-      payload: "An error occured",
     };
   }
 }
@@ -143,9 +163,35 @@ async function updateBook(book, id) {
 }
 
 async function getBookById(id) {
-  let data = await api(`/api/v1/book/find/by/bookId/${id}`, "GET", null);
-
-  return data.json();
+  try {
+    let data = await api(`/api/v1/book/find/by/bookId/${id}`, "GET", null);
+    console.log(data, "this is data getBookById");
+    if (data.status === 200) {
+      let rez = await data.json();
+      console.log(rez, "this is rez from getbookbyid");
+      return {
+        payload: rez,
+        type: "success",
+      };
+    } else if (data.status === 400) {
+      let rez = await data.json();
+      return {
+        payload: rez.error.message,
+        type: "error",
+      };
+    } else if (data.status === 500) {
+      let rez = await data.json();
+      return {
+        payload: rez.error,
+        type: "error",
+      };
+    }
+  } catch (error) {
+    return {
+      payload: "error occured",
+      type: "error",
+    };
+  }
 }
 
 export {

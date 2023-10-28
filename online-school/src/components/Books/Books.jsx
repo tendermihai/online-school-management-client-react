@@ -5,12 +5,13 @@ import BookCard from "./BookCard";
 import Spinner from "react-bootstrap/Spinner";
 import { getBooksByStudentId } from "../../service/book-service";
 import { useNavigate } from "react-router";
-import { useLocation } from "react-router-dom";
-
+import { useContext } from "react";
+import { ContextSignIn } from "../context/ContextSignIn";
 
 const Books = () => {
 
-    const student_id = "1"
+    const { signIn } = useContext(ContextSignIn);
+
     const [books, setBooks] = useState([]);
     const [loadingState, setLoadingState] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -18,10 +19,11 @@ const Books = () => {
     const navigate = useNavigate();
 
 
-    const handleBooks = async (student_id) => {
+    const handleBooks = async () => {
         try {
             setLoadingState("loading");
-            const response = await getBooksByStudentId(student_id);
+            const response = await getBooksByStudentId(signIn.payload.user.id);
+            console.log(response, 'this is response with signINID')
             console.log(response.payload, "Books data")
             if (response.type === "success") {
                 setBooks(response.payload);
@@ -39,19 +41,19 @@ const Books = () => {
     };
 
     useEffect(() => {
-        handleBooks(student_id);
-    }, [student_id]);
+        handleBooks(signIn.id);
+    }, [signIn.id]);
 
 
 
     return (
         <>
             <NavbarItem />
-            <BookAdd student_id={student_id} />
+            <BookAdd student_id={signIn.id} />
 
             {loadingState === "success" && (
                 <div className="container-cards">
-                    {books?.length > 0 ? (
+                    {books.length > 0 ? (
                         books.map((book) => {
                             return <BookCard book={book} />;
                         })

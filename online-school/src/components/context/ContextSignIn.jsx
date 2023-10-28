@@ -15,6 +15,8 @@ const SignInProvider = ({ children }) => {
         age: 0,
         email: "",
         password: "",
+        token: "",
+
 
     })
 

@@ -2,23 +2,24 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { getBookById, updateBook } from "../../service/book-service";
-import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { ContextSignIn } from "../context/ContextSignIn";
+import { useParams } from "react-router";
+
 
 
 let BookUpdate = () => {
-
     const navigate = useNavigate();
+    const { id } = useParams()
+
+    const { signIn } = useContext(ContextSignIn)
 
 
     const [bookTitle, setBookTitle] = useState("");
     const [estimatedTime, setEstimatedTime] = useState("");
 
-    const { student_id } = useLocation().state;
-    const { id } = useLocation().state
-
-
-
-
+    // const { student_id } = useLocation().state;
+    // const { id } = useLocation().state
 
 
     useEffect(() => {
@@ -26,16 +27,14 @@ let BookUpdate = () => {
     }, [])
 
     let handleUpdateBook = async () => {
-        console.log(id, 'this is the id of the book')
         try {
             const data = await getBookById(id);
-            console.log("this is data with getBookId(id)")
+            console.log(data, 'this is data of getbookbyid')
 
-            setBookTitle(data.bookTitle);
-            setEstimatedTime(data.estimatedTime)
+            setBookTitle(data.payload.bookName);
+            setEstimatedTime(data.payload.createdAt)
 
         } catch (error) {
-            console.log("Error fetching book data:", error)
         }
     }
 
@@ -46,9 +45,8 @@ let BookUpdate = () => {
             const book = {
                 bookName: bookTitle,
                 createdAt: estimatedTime,
-                student_id: student_id,
+                student_id: signIn.payload.user.id,
             }
-            console.log(book, 'this is book')
             await updateBook({ book }, id)
             // write to navigate to book-show after updated btn is clicked
             navigate("/books-show")

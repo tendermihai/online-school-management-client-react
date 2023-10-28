@@ -4,18 +4,23 @@ import Card from "./Cards";
 import Spinner from "react-bootstrap/Spinner";
 import NavbarItem from "../NavbarItem";
 import { useSortContext } from "../context/ContextSort";
+import { ContextSignIn } from "../context/ContextSignIn";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
 
 const Home = () => {
     const { sortOption } = useSortContext();
+    const { signIn } = useContext(ContextSignIn);
     const [courses, setCourses] = useState([]);
     const [loadingState, setLoadingState] = useState("init");
     const [errorMessage, setErrorMessage] = useState("");
-    const student_id = 1;
+    const navigate = useNavigate()
+
 
     const handleCourses = async () => {
         setLoadingState("loading");
 
-        const response = await verifyCourse(student_id);
+        const response = await verifyCourse(signIn.payload.user.id);
 
         if (response.type === "success") {
             setLoadingState("success");
@@ -27,7 +32,14 @@ const Home = () => {
     };
 
     useEffect(() => {
-        handleCourses();
+
+        if (signIn.id !== 0) {
+            handleCourses();
+        } else {
+
+            navigate("/sign-in");
+        }
+
     }, []);
 
     const getSortedCourses = () => {
@@ -44,6 +56,7 @@ const Home = () => {
 
     return (
         <>
+
             <NavbarItem />
             {loadingState === "success" && (
                 <div className="container-cards">

@@ -10,7 +10,7 @@ import { useContext } from "react";
 const NavbarItem = () => {
     const navigate = useNavigate();
     const { sortOption, handleSort } = useSortContext();
-    const { signIn, handleSignIn } = useContext(ContextSignIn)
+    const { signIn, handleSignIn } = useContext(ContextSignIn);
 
     let handleSignUP = () => {
         navigate("/sign-up");
@@ -30,19 +30,18 @@ const NavbarItem = () => {
 
     let handleSignOut = () => {
 
-        handleSignIn({
-            id: 0,
-            firstName: "",
-            lastName: "",
-            age: 0,
-            email: "",
-            password: "",
+        // handleSignIn({
+        //     id: 0,
+        //     firstName: "",
+        //     lastName: "",
+        //     age: 0,
+        //     email: "",
+        //     password: "",
 
-        })
+        // })
 
         alert("You have sign out !")
-
-
+        navigate("/sign-in")
     }
 
     return (
@@ -51,13 +50,13 @@ const NavbarItem = () => {
             {signIn.id !== 0 ? (
                 <Navbar expand="lg" className="bg-body-tertiary navbar-expand-lg bg-dark" data-bs-theme="dark">
                     <Container>
-                        <Navbar.Brand href="/" onClick={handleCoursePage}>Courses</Navbar.Brand>
-                        <Navbar.Brand href="#link" onClick={handleBooksPage}>Books</Navbar.Brand>
+                        <Navbar.Brand onClick={handleCoursePage}>Courses</Navbar.Brand>
+                        <Navbar.Brand onClick={handleBooksPage}>Books</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
-                                <p className="hello-user">Hello, {signIn.payload.firstName}</p>
-                                <Nav.Link href="#home" onClick={handleSignOut}>Sign Out</Nav.Link>
+                                <p className="hello-user">Hello, {signIn.payload.user.firstName}</p>
+                                <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
 
                             </Nav>
                         </Navbar.Collapse>

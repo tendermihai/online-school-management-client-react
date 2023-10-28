@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import { getBookById } from "../../service/book-service";
 import BookUpdate from "./BookUpdate";
 import { useNavigate } from "react-router";
-import { useLocation } from "react-router-dom";
+
 
 
 const BookCard = ({ book }) => {
@@ -34,10 +34,9 @@ const BookCard = ({ book }) => {
         }
     }
 
-    let handleUpdatePage = () => {
-        navigate("/books-update", {
-            state: { student_id, id }
-        })
+    let handleUpdatePage = async () => {
+        navigate(`/books-update/${id}`)
+
         console.log(id, 'this is book id')
         console.log(student_id, 'this is the student_id')
     }

@@ -1,4 +1,4 @@
-function api(path, method, body) {
+function api(path, method, body, token) {
   const url = "http://localhost:2020" + path;
 
   const options = {
@@ -6,6 +6,7 @@ function api(path, method, body) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-Requested-With": "XMLHttpRequest",
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -22,15 +23,15 @@ function api(path, method, body) {
 async function getAllCourses() {
   try {
     let data = await api("/api/v1/course/all", "GET", null);
-    if (data.status == 200) {
+    if (data.status === 200) {
       let rez = await data.json();
       return {
         payload: rez,
         type: "success",
       };
-    } else if (data.status == 400) {
+    } else if (data.status === 400) {
       let rez = await data.json();
-      console.log(rez, "this is rez");
+
       return {
         payload: rez.error.message,
         type: "error",
@@ -60,9 +61,14 @@ async function findEnrolmentById(id) {
   return data.json();
 }
 
-async function verifyCourse(id) {
+async function verifyCourse(student_id, token) {
   try {
-    let data = await api(`/api/v1/course/verify/${id}`, "GET", null);
+    let data = await api(
+      `/api/v1/course/verify/${student_id}`,
+      "GET",
+      null,
+      token
+    );
     if (data.status === 200) {
       let rez = await data.json();
 

@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import { addEnrolment, unEnrollment } from "../../service/enrolment-service";
 import Spinner from "react-bootstrap/Spinner";
 import { useEffect } from "react";
+import { ContextSignIn } from "../context/ContextSignIn";
+import { useContext } from "react";
 
 
 const Card = ({ course, allCourses }) => {
     const [loadingState, setLoadingState] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    console.log(course, 'this is my logged course')
-    let userId = '1';
+    const { signIn } = useContext(ContextSignIn)
+
+
+
+
+
 
     const getCurrentDate = () => {
         const currentDate = new Date();
@@ -26,11 +32,9 @@ const Card = ({ course, allCourses }) => {
 
             const response = await addEnrolment({
                 createdAt: getCurrentDate(),
-                student_id: `${userId}`,
+                student_id: `${signIn.payload.user.id}`,
                 course_id: `${course.id}`,
             });
-
-            console.log(response, 'this is subscribe resp');
 
             await allCourses();
 
@@ -42,7 +46,7 @@ const Card = ({ course, allCourses }) => {
                 setErrorMessage(response.payload);
             }
         } catch (error) {
-            console.log("Error while subscribing", error);
+
             setLoadingState("error");
             setErrorMessage("An error occurred");
         }
@@ -55,16 +59,16 @@ const Card = ({ course, allCourses }) => {
 
 
 
-            const enrolmentResponse = await unEnrollment(userId, course.id);
+            const enrolmentResponse = await unEnrollment(signIn.payload.user.id, course.id);
 
             await allCourses()
 
-            console.log(enrolmentResponse.payload, 'enrolment response asda')
+
 
 
             if (enrolmentResponse.type === "success") {
                 const enrolment = enrolmentResponse.payload;
-                console.log(enrolment, 'this is my enrolment')
+                console.log(enrolment, 'what is this enrolment')
 
 
                 if (enrolmentResponse.type === "success") {
@@ -80,7 +84,6 @@ const Card = ({ course, allCourses }) => {
                 setErrorMessage(enrolmentResponse.payload);
             }
         } catch (error) {
-            console.log("Error while unsubscribing", error);
             setLoadingState("error");
             setErrorMessage("An error occurred");
         }
@@ -101,7 +104,7 @@ const Card = ({ course, allCourses }) => {
                     <p className="card-text">Department: {course.department}</p>
                     <section className="btns">
 
-                        {course.enrolled == true ? (
+                        {course.enrolled === true ? (
                             <button className="unsubscribe" onClick={handleUnsubscribe}>
                                 Unsubscribe
                             </button>
