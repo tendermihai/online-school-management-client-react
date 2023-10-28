@@ -13,6 +13,7 @@ const SignUp = () => {
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmedPassword, setConfirmedPassword] = useState("")
     const [age, setAge] = useState("")
     const [error, setError] = useState("")
 
@@ -29,7 +30,8 @@ const SignUp = () => {
 
         event.preventDefault()
         try {
-            await registerStudent(firstName, lastName, age, email, password)
+            await registerStudent(firstName, lastName, age, email, password, confirmedPassword)
+            console.log(firstName, lastName, age, email, password, confirmedPassword)
             navigate("/");
         } catch (error) {
             setError("Registration failed. Please check your credentials.")
@@ -65,6 +67,10 @@ const SignUp = () => {
                             <input id="emailAddress" name="emailAddress" type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                             <label for="password">Password</label>
                             <input id="password" name="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                            <label for="password">Confirm Password</label>
+                            <input id="confirmedPassword" name="confirmedPassword" type="password" value={confirmedPassword} onChange={(event) => setConfirmedPassword(event.target.value)} />
+
+
                             {error && <p className="error-message">{error}</p>}
                             <button className="button " type="submit" onClick={handleSignUp}>Sign Up</button><button className="button button-secondary" onClick={handleCancel}>Cancel</button>
                         </form>

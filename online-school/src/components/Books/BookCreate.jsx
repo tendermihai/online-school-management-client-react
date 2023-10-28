@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import NavbarItem from "../NavbarItem";
-import { addNewBook } from "../../service/book-service";
-import { useLocation } from 'react-router-dom';
+import { addNewBook } from "../../service/book-service.js";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from 'antd';
+import { ContextSignIn } from "../context/ContextSignIn";
 
 
 const BookCreate = () => {
+
+    const { signIn } = useContext(ContextSignIn)
     const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
-    const student_id = useLocation().state;
 
-    console.log(student_id, ' this is state')
+
     const [bookData, setBookData] = useState({
         bookName: "",
         createdAt: "",
@@ -28,18 +30,21 @@ const BookCreate = () => {
 
             handleCheckValidation();
 
-            if (errors.length == 0) {
+            if (errors.length === 0) {
                 const book = {
                     bookName: bookData.bookName,
                     createdAt: bookData.createdAt,
-                    student_id: student_id,
+                    student_id: signIn.payload.user.id,
 
                 }
 
                 const response = await addNewBook(book)
 
-                if (response.type === "succes") {
+                console.log(response.type, 'this is response.type')
+                console.log(errors.length, 'length of errors')
+                if (response.type === "success") {
                     setLoadingState("success")
+                    console.log("Redirecting to /books-show");
                     navigate("/books-show")
 
                 }
@@ -51,7 +56,7 @@ const BookCreate = () => {
 
         } catch (error) {
             setLoadingState("error");
-            setErrorMessage("An error occured");
+            setErrorMessage("An error occured" + error.message);
         }
 
     }
@@ -65,14 +70,14 @@ const BookCreate = () => {
     //todo:check validations 
     let handleCheckValidation = () => {
 
-        console.log(bookData);
+
         let aux = [];
 
-        if (bookData.bookName == "") {
+        if (bookData.bookName === "") {
             aux.push("Please enter a book name");
         }
 
-        if (bookData.createdAt == "") {
+        if (bookData.createdAt === "") {
             aux.push("Please enter a date");
         }
 

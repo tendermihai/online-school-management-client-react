@@ -410,3 +410,7 @@ textarea:focus {
   border: none;
   background-color: #e83283;
 }
+
+.navbar-brand {
+  cursor: pointer;
+}

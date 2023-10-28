@@ -21,11 +21,13 @@ const SignIn = () => {
         navigate("/sign-up")
     }
 
+
     let handleLogin = async (event) => {
         event.preventDefault()
         try {
             let data = await loginStudent(email, password)
             console.log(data, 'this is my login data')
+
             handleSignIn(data);
             navigate("/")
 

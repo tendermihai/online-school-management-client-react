@@ -8,16 +8,20 @@ import BookCreate from "./components/Books/BookCreate";
 import BookUpdate from "./components/Books/BookUpdate";
 
 const App = () => {
+
+
   return (
     <>
       <BrowserRouter>
         <Routes>
+
           <Route path="/" element={<Home />} />
-          <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
           <Route path="/books-show" element={<Books />} />
           <Route path="/books-create" element={<BookCreate />} />
-          <Route path="/books-update" element={<BookUpdate />} />
+          <Route path="/books-update/:id" element={<BookUpdate />} />
+
         </Routes>
       </BrowserRouter>
     </>

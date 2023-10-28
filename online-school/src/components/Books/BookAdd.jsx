@@ -1,15 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import BookCreate from "./BookCreate";
+import { ContextSignIn } from "../context/ContextSignIn";
+import { useContext } from "react";
 
-const BookAdd = ({ student_id }) => {
 
+const BookAdd = () => {
+
+    const { signIn } = useContext(ContextSignIn)
     const navigate = useNavigate()
 
     let handleBookCreatePage = () => {
 
         navigate("/books-create", {
-            state: student_id
+            state: signIn.payload.user.id
         })
     }
 

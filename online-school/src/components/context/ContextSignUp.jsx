@@ -8,8 +8,8 @@ export const useSignUpContext = () => {
 const SignUpProvider = ({ children }) => {
     const [signUp, setSignUp] = useState("")
 
-    const handleSignUp = (firstName, lastName, email, password) => {
-        setSignUp(firstName, lastName, email, password)
+    const handleSignUp = (firstName, lastName, email, password, confirmedPassword) => {
+        setSignUp(firstName, lastName, email, password, confirmedPassword)
     }
 
 
